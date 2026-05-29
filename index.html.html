@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScrapZone — Só pra quem viveu</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0d0d14;
+  --surface:  #13131f;
+  --surface2: #1a1a2e;
+  --pink:     #e040fb;
+  --pink-glow:rgba(224,64,251,0.25);
+  --blue:     #448aff;
+  --blue-glow:rgba(68,138,255,0.2);
+  --white:    #f0f0ff;
+  --text:     #c8c8e8;
+  --muted:    #6868a0;
+  --border:   rgba(255,255,255,0.07);
+  --green:    #00e676;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── FUNDO ANIMADO ── */
+.bg-orbs {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orbFloat 12s ease-in-out infinite;
+}
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(224,64,251,0.12), transparent 70%);
+  top: -100px; left: -100px;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(68,138,255,0.1), transparent 70%);
+  bottom: -150px; right: -100px;
+  animation-delay: -6s;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(224,64,251,0.07), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation-delay: -3s;
+}
+@keyframes orbFloat {
+  0%,100% { transform: scale(1) translate(0,0); }
+  33%      { transform: scale(1.08) translate(20px,-20px); }
+  66%      { transform: scale(0.95) translate(-15px,15px); }
+}
+
+/* ── GRID NOISE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(13,13,20,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 22px; font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, var(--pink), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+.nav-tag {
+  font-size: 11px; font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: 2px;
+}
+
+.btn-nav {
+  background: linear-gradient(135deg, var(--pink), #b000d0);
+  color: #fff; border: none;
+  padding: 9px 20px; border-radius: 20px;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.3px;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px rgba(224,64,251,0.3);
+}
+.btn-nav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(224,64,251,0.5);
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 100px 24px 60px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(224,64,251,0.08);
+  border: 1px solid rgba(224,64,251,0.25);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px; font-weight: 700;
+  color: var(--pink);
+  letter-spacing: 0.5px;
+  margin-bottom: 32px;
+  animation: fadeDown 0.6s ease both;
+}
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--pink);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(224,64,251,0.4)} 50%{opacity:0.6;box-shadow:0 0 0 6px rgba(224,64,251,0)} }
+
+/* Logo principal */
+.hero-logo {
+  font-size: clamp(64px, 12vw, 120px);
+  font-weight: 900;
+  letter-spacing: -4px;
+  line-height: 0.9;
+  margin-bottom: 8px;
+  animation: fadeDown 0.6s 0.1s ease both;
+  position: relative;
+}
+.logo-scrap {
+  background: linear-gradient(135deg, #fff, #e0d0ff);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(255,255,255,0.15));
+}
+.logo-zone {
+  background: linear-gradient(135deg, var(--pink), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 40px rgba(224,64,251,0.4));
+}
+
+/* Bolhas de chat decorativas */
+.chat-bubble {
+  position: absolute;
+  border-radius: 3px;
+  opacity: 0.6;
+  animation: bubbleFloat 4s ease-in-out infinite;
+}
+.cb-pink {
+  width: 40px; height: 30px;
+  border: 2px solid var(--pink);
+  box-shadow: 0 0 15px var(--pink-glow), inset 0 0 10px var(--pink-glow);
+  top: -20px; right: -60px;
+  animation-delay: 0s;
+}
+.cb-blue {
+  width: 50px; height: 35px;
+  border: 2px solid var(--blue);
+  box-shadow: 0 0 15px var(--blue-glow), inset 0 0 10px var(--blue-glow);
+  bottom: -10px; left: -40px;
+  animation-delay: -2s;
+}
+@keyframes bubbleFloat {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-8px) rotate(3deg); }
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+  animation: fadeDown 0.6s 0.2s ease both;
+}
+
+.hero-tagline {
+  font-size: clamp(14px, 1.8vw, 17px);
+  color: var(--muted);
+  margin-bottom: 48px;
+  max-width: 520px;
+  line-height: 1.7;
+  animation: fadeDown 0.6s 0.3s ease both;
+}
+.hero-tagline b { color: var(--text); }
+
+/* ── CONTADOR ── */
+.counter-wrap {
+  display: flex; gap: 24px; justify-content: center;
+  margin-bottom: 48px;
+  animation: fadeDown 0.6s 0.35s ease both;
+}
+.counter-item { text-align: center; }
+.counter-n {
+  font-family: 'DM Mono', monospace;
+  font-size: 32px; font-weight: 500;
+  background: linear-gradient(135deg, var(--pink), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.counter-l {
+  font-size: 11px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-top: 4px;
+}
+.counter-sep {
+  width: 1px; background: var(--border);
+  align-self: stretch; margin: 4px 0;
+}
+
+/* ── FORM ── */
+.signup-wrap {
+  width: 100%; max-width: 460px;
+  animation: fadeDown 0.6s 0.4s ease both;
+}
+
+.form-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  backdrop-filter: blur(10px);
+}
+
+.form-box-title {
+  font-size: 16px; font-weight: 800;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.form-box-sub {
+  font-size: 12px; color: var(--muted);
+  margin-bottom: 20px; line-height: 1.5;
+}
+
+.fi { margin-bottom: 12px; }
+.fi label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  margin-bottom: 5px;
+}
+.optional-tag {
+  background: rgba(68,138,255,0.15);
+  color: var(--blue);
+  font-size: 9px; padding: 1px 6px;
+  border-radius: 8px; text-transform: none; letter-spacing: 0;
+}
+
+.input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--white);
+  font-family: inherit; font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+.input:focus {
+  border-color: var(--pink);
+  background: rgba(224,64,251,0.05);
+  box-shadow: 0 0 0 3px rgba(224,64,251,0.1);
+}
+.input::placeholder { color: var(--muted); font-size: 13px; }
+
+.phone-row { display: flex; gap: 8px; }
+.flag-box {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text); font-size: 14px;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* CAPTCHA */
+.captcha {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; margin-bottom: 12px;
+  transition: all 0.2s; user-select: none;
+}
+.captcha:hover { border-color: rgba(224,64,251,0.3); }
+.captcha.ok { border-color: rgba(0,230,118,0.4); background: rgba(0,230,118,0.04); }
+.cap-left { display: flex; align-items: center; gap: 12px; }
+.cap-check {
+  width: 22px; height: 22px; border-radius: 4px;
+  border: 2px solid var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; flex-shrink: 0; font-size: 13px;
+}
+.cap-check.spin { border-color: var(--pink); animation: spin 0.6s linear infinite; }
+.cap-check.done { background: var(--green); border-color: var(--green); color: #000; font-weight: 900; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.cap-text { font-size: 13px; font-weight: 600; color: var(--text); }
+.cap-brand { font-size: 10px; color: var(--muted); text-align: right; line-height: 1.4; }
+
+/* Convite */
+.invite-toggle {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted);
+  cursor: pointer; margin-bottom: 10px;
+  padding: 8px 0;
+}
+.invite-toggle input { accent-color: var(--pink); width: 15px; height: 15px; cursor: pointer; }
+.invite-field { display: none; margin-bottom: 12px; }
+.invite-field.show { display: block; }
+
+/* Botão principal */
+.btn-join {
+  width: 100%;
+  background: linear-gradient(135deg, var(--pink), #b000d0);
+  color: #fff; border: none;
+  border-radius: 12px;
+  padding: 15px;
+  font-family: inherit; font-size: 15px; font-weight: 800;
+  cursor: pointer; letter-spacing: 0.5px;
+  transition: all 0.2s;
+  box-shadow: 0 0 30px rgba(224,64,251,0.25);
+}
+.btn-join:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(224,64,251,0.45);
+}
+.btn-join:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.privacy-note {
+  display: flex; gap: 6px; align-items: flex-start;
+  margin-top: 12px;
+  font-size: 11px; color: var(--muted); line-height: 1.5;
+}
+
+/* ── SUCESSO ── */
+.success-box {
+  text-align: center; padding: 8px 0;
+}
+.success-icon { font-size: 56px; margin-bottom: 12px; animation: pop 0.4s ease both; }
+@keyframes pop { from{transform:scale(0.5)} to{transform:scale(1)} }
+.success-title { font-size: 24px; font-weight: 900; color: var(--white); margin-bottom: 6px; }
+.success-pos {
+  font-family: 'DM Mono', monospace;
+  font-size: 42px; font-weight: 500;
+  background: linear-gradient(135deg, var(--pink), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin: 14px 0 4px;
+}
+.success-pos-l { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+
+.invite-code-box {
+  background: rgba(224,64,251,0.06);
+  border: 1px dashed rgba(224,64,251,0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.invite-code-l { font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.invite-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 24px; font-weight: 500;
+  color: var(--pink);
+  letter-spacing: 3px;
+}
+.copy-hint { font-size: 11px; color: var(--blue); margin-top: 6px; cursor: pointer; }
+.copy-hint:hover { text-decoration: underline; }
+
+.share-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.btn-share {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-family: inherit; font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-share:hover { background: rgba(224,64,251,0.1); border-color: rgba(224,64,251,0.3); color: var(--white); }
+
+/* ── SEÇÃO NOSTALGIA / FEATURES ── */
+.section {
+  position: relative; z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+.section-eyebrow {
+  text-align: center;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--pink);
+  margin-bottom: 12px;
+}
+.section-title {
+  text-align: center;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  color: var(--white);
+  margin-bottom: 48px;
+  line-height: 1.2;
+}
+.section-title span { 
+  background: linear-gradient(135deg, var(--pink), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+/* Cards nostalgia */
+.nostalgia-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
+}
+
+.ncard {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+.ncard::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--pink), var(--blue));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.ncard:hover {
+  border-color: rgba(224,64,251,0.25);
+  background: rgba(224,64,251,0.04);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(224,64,251,0.1);
+}
+.ncard:hover::before { transform: scaleX(1); }
+
+.ncard-icon {
+  font-size: 32px; margin-bottom: 12px; display: block;
+  transition: transform 0.3s;
+}
+.ncard:hover .ncard-icon { transform: scale(1.12) rotate(-5deg); }
+.ncard-title { font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+.ncard-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.ncard-tag {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 10px;
+  letter-spacing: 0.5px;
+}
+.tag-old { background: rgba(255,255,255,0.06); color: var(--muted); }
+.tag-new { background: rgba(0,230,118,0.1); color: var(--green); }
+.tag-pink { background: rgba(224,64,251,0.1); color: var(--pink); }
+
+/* ── DIVIDER ── */
+.neon-divider {
+  position: relative; z-index: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--pink), transparent);
+  opacity: 0.3;
+  margin: 0 32px;
+}
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 20px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.foot-logo {
+  font-size: 18px; font-weight: 900;
+  background: linear-gradient(90deg, var(--pink), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.foot-links { display: flex; gap: 18px; }
+.foot-links a { font-size: 12px; color: var(--muted); text-decoration: none; cursor: pointer; transition: color 0.15s; }
+.foot-links a:hover { color: var(--pink); }
+.foot-secure {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--green);
+  font-family: 'DM Mono', monospace;
+}
+.pulse2 { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--pink);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 13px; font-weight: 600;
+  color: var(--white);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  display: none;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+/* ── ANIMS ── */
+@keyframes fadeDown {
+  from { opacity:0; transform:translateY(-12px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width: 700px) {
+  .nostalgia-grid { grid-template-columns: 1fr; }
+  .counter-wrap { gap: 14px; }
+  .counter-n { font-size: 24px; }
+  nav { padding: 12px 18px; }
+  .nav-tag { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">ScrapZone</div>
+  <div class="nav-tag">Em breve · Lista fechada</div>
+  <button class="btn-nav" onclick="document.getElementById('emailInput').focus();document.getElementById('signupForm').scrollIntoView({behavior:'smooth'})">
+    Quero entrar →
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Inspirado na era Orkut 2008 · Só pra quem viveu
+  </div>
+
+  <div class="hero-logo">
+    <span class="logo-scrap">Scrap</span><span class="logo-zone">Zone</span>
+    <div class="chat-bubble cb-pink"></div>
+    <div class="chat-bubble cb-blue"></div>
+  </div>
+
+  <div class="hero-sub">A era dos scraps está de volta.</div>
+
+  <p class="hero-tagline">
+    Comunidades, recados, testemunhos, fãs, karma.<br>
+    <b>Só pra quem viveu o Orkut de verdade.</b><br>
+    Desta vez, com a privacidade que você sempre mereceu.
+  </p>
+
+  <!-- Contador -->
+  <div class="counter-wrap">
+    <div class="counter-item">
+      <div class="counter-n" id="cCount">3.241</div>
+      <div class="counter-l">na lista</div>
+    </div>
+    <div class="counter-sep"></div>
+    <div class="counter-item">
+      <div class="counter-n">3</div>
+      <div class="counter-l">convites / pessoa</div>
+    </div>
+    <div class="counter-sep"></div>
+    <div class="counter-item">
+      <div class="counter-n">Beta</div>
+      <div class="counter-l">acesso fechado</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="signup-wrap" id="signupForm">
+    <div class="form-box">
+      <div class="form-box-title">Garantir meu lugar 🎟️</div>
+      <div class="form-box-sub">Seja dos primeiros. Você ganha <b style="color:var(--pink)">3 convites</b> pra chamar seus amigos.</div>
+
+      <div id="step1">
+        <div class="fi">
+          <label>Nome</label>
+          <input class="input" type="text" id="nameInput" placeholder="Como te chamavam no Orkut 😄" oninput="checkReady()">
+        </div>
+        <div class="fi">
+          <label>Email</label>
+          <input class="input" type="email" id="emailInput" placeholder="seu@email.com" oninput="checkReady()" onkeydown="if(event.key==='Enter')document.getElementById('phoneInput').focus()">
+        </div>
+        <div class="fi">
+          <label>Telefone <span class="optional-tag">opcional</span></label>
+          <div class="phone-row">
+            <div class="flag-box">🇧🇷 +55</div>
+            <input class="input" type="tel" id="phoneInput" placeholder="(11) 99999-9999" style="flex:1">
+          </div>
+        </div>
+
+        <!-- CAPTCHA -->
+        <div class="captcha" id="captchaBox" onclick="doCaptcha()">
+          <div class="cap-left">
+            <div class="cap-check" id="capCheck"></div>
+            <span class="cap-text" id="capText">Não sou um robô</span>
+          </div>
+          <div class="cap-brand">reCAPTCHA<br>Privacidade · Termos</div>
+        </div>
+
+        <!-- Convite -->
+        <label class="invite-toggle">
+          <input type="checkbox" id="hasInvite" onchange="toggleInvite()">
+          Tenho um código de convite de um amigo 🎟️
+        </label>
+        <div class="invite-field" id="inviteField">
+          <input class="input" type="text" id="inviteCode" placeholder="Ex: SZ-A3B9K2" style="font-family:'DM Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">
+        </div>
+
+        <button class="btn-join" id="joinBtn" onclick="doJoin()" disabled>
+          Entrar na ScrapZone →
+        </button>
+
+        <div class="privacy-note">
+          🔒 Seu email nunca será compartilhado. Sem spam — só um aviso quando abrir.
+        </div>
+      </div>
+
+      <!-- SUCESSO -->
+      <div id="step2" style="display:none;">
+        <div class="success-box">
+          <div class="success-icon">🎉</div>
+          <div class="success-title">Você está dentro!</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Sua posição na fila</div>
+          <div class="success-pos" id="successPos">#3.242</div>
+          <div class="success-pos-l">Avisaremos no email quando abrir o beta</div>
+
+          <div class="invite-code-box">
+            <div class="invite-code-l">Seu código de convite exclusivo</div>
+            <div class="invite-code" id="myCode">SZ-XXXXX</div>
+            <div class="copy-hint" onclick="copyCode()">📋 Toque para copiar</div>
+          </div>
+
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:700;">
+            Cada amigo que entrar com seu código sobe você na fila! 🚀
+          </div>
+
+          <div class="share-btns">
+            <button class="btn-share" onclick="shareWA()">💬 WhatsApp</button>
+            <button class="btn-share" onclick="shareFB()">📘 Facebook</button>
+            <button class="btn-share" onclick="shareTW()">𝕏 Twitter</button>
+            <button class="btn-share" onclick="copyLink()">🔗 Copiar link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SEÇÃO FEATURES -->
+<section class="section">
+  <div class="section-eyebrow">Por que ScrapZone?</div>
+  <div class="section-title">Tudo que você amava.<br><span>Sem nada do que te prejudicava.</span></div>
+
+  <div class="nostalgia-grid">
+    <div class="ncard">
+      <span class="ncard-icon">✉️</span>
+      <div class="ncard-title">Scraps de volta</div>
+      <div class="ncard-desc">Os recados que definiram uma geração. Escreva na parede dos seus amigos como em 2008.</div>
+      <span class="ncard-tag tag-pink">O clássico</span>
+    </div>
+    <div class="ncard">
+      <span class="ncard-icon">🌐</span>
+      <div class="ncard-title">Comunidades</div>
+      <div class="ncard-desc">"Eu odeio acordar cedo", "Sou invisível até alguém sentar no meu lugar". As comunidades estão de volta.</div>
+      <span class="ncard-tag tag-pink">Nostalgia pura</span>
+    </div>
+    <div class="ncard">
+      <span class="ncard-icon">📝</span>
+      <div class="ncard-title">Testemunhos</div>
+      <div class="ncard-desc">Escreva algo sincero sobre seus amigos. Com aprovação do dono do perfil antes de publicar.</div>
+      <span class="ncard-tag tag-new">+ seguro</span>
+    </div>
+    <div class="ncard">
+      <span class="ncard-icon">🔐</span>
+      <div class="ncard-title">Privacidade de verdade</div>
+      <div class="ncard-desc">Suas mensagens saem do seu celular já protegidas. Nem a gente consegue ler o que você manda pra seus amigos.</div>
+      <span class="ncard-tag tag-new">Suas mensagens são suas</span>
+    </div>
+    <div class="ncard">
+      <span class="ncard-icon">🤝</span>
+      <div class="ncard-title">Sistema de convites</div>
+      <div class="ncard-desc">Cada usuário convida quem confia. Sem bots, sem perfis falsos em massa, sem spam.</div>
+      <span class="ncard-tag tag-new">Anti-bot</span>
+    </div>
+    <div class="ncard">
+      <span class="ncard-icon">🚫</span>
+      <div class="ncard-title">Zero anúncios</div>
+      <div class="ncard-desc">Seus dados não são produto. Nenhum anúncio, nenhuma venda de informação. Nunca.</div>
+      <span class="ncard-tag tag-new">Zero data</span>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">ScrapZone</div>
+  <div class="foot-links">
+    <a onclick="toast('Em breve!')">Sobre</a>
+    <a onclick="toast('Em breve!')">Privacidade</a>
+    <a onclick="toast('Em breve!')">Termos</a>
+    <a onclick="toast('Em breve!')">Contato</a>
+  </div>
+  <div class="foot-secure">
+    <span class="pulse2"></span>
+    Seus dados são seus. Sempre.
+  </div>
+</footer>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+let captchaDone = false;
+let waitCount = 3241;
+
+// ── CAPTCHA ──
+function doCaptcha() {
+  if (captchaDone) return;
+  const check = document.getElementById('capCheck');
+  const text  = document.getElementById('capText');
+  const box   = document.getElementById('captchaBox');
+  check.classList.add('spin');
+  text.textContent = 'Verificando...';
+  setTimeout(() => {
+    check.classList.remove('spin');
+    check.classList.add('done');
+    check.textContent = '✓';
+    text.textContent = 'Verificado ✓';
+    box.classList.add('ok');
+    captchaDone = true;
+    checkReady();
+  }, 1100);
+}
+
+// ── FORM READY ──
+function checkReady() {
+  const name  = document.getElementById('nameInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+  const btn   = document.getElementById('joinBtn');
+  const ok = name.length > 1 && email.includes('@') && captchaDone;
+  btn.disabled = !ok;
+}
+
+// ── INVITE TOGGLE ──
+function toggleInvite() {
+  const show = document.getElementById('hasInvite').checked;
+  document.getElementById('inviteField').classList.toggle('show', show);
+}
+
+// ── SUBMIT ──
+function doJoin() {
+  const btn = document.getElementById('joinBtn');
+  btn.textContent = 'Entrando...';
+  btn.disabled = true;
+
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = 'SZ-';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+
+  setTimeout(() => {
+    waitCount++;
+    document.getElementById('cCount').textContent = waitCount.toLocaleString('pt-BR');
+    document.getElementById('successPos').textContent = '#' + waitCount.toLocaleString('pt-BR');
+    document.getElementById('myCode').textContent = code;
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
+    document.getElementById('signupForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 1400);
+}
+
+// ── COMPARTILHAR ──
+const getMsg = () => {
+  const code = document.getElementById('myCode').textContent;
+  return `🚀 ScrapZone está chegando!\n\nSabe aquela saudade do Orkut? Os scraps, as comunidades, os testemunhos?\n\nVoltou — só que agora com privacidade de verdade.\n\nEntra na lista com meu convite → ${window.location.href}\nCódigo: ${code}`;
+};
+function shareWA()   { window.open('https://wa.me/?text=' + encodeURIComponent(getMsg())); }
+function shareFB()   { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href)); }
+function shareTW()   { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(getMsg())); }
+function copyLink()  { navigator.clipboard.writeText(window.location.href).then(() => toast('🔗 Link copiado!')); }
+function copyCode()  { navigator.clipboard.writeText(document.getElementById('myCode').textContent).then(() => toast('📋 Código copiado!')); }
+
+// ── TOAST ──
+let _t;
+function toast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(_t);
+  _t = setTimeout(() => el.style.display = 'none', 2800);
+}
+
+// ── CONTADOR ANIMADO ──
+function animCount(el, target) {
+  let v = target - 80;
+  const step = () => { if(v < target) { v++; el.textContent = v.toLocaleString('pt-BR'); requestAnimationFrame(step); } };
+  step();
+}
+setTimeout(() => animCount(document.getElementById('cCount'), waitCount), 500);
+</script>
+</body>
+</html>
