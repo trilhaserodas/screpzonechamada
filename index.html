@@ -611,6 +611,12 @@ footer {
 
   <!-- FORM -->
   <div class="signup-wrap" id="signupForm">
+    <form action="https://formsubmit.co/darkjuniorsombra@gmail.com" method="POST">
+    
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="Novo cadastro ScrapZone">
+    <input type="hidden" name="_template" value="table">
+
     <div class="form-box">
       <div class="form-box-title">Garantir meu lugar 🎟️</div>
       <div class="form-box-sub">Seja dos primeiros. Você ganha <b style="color:var(--pink)">3 convites</b> pra chamar seus amigos.</div>
@@ -618,17 +624,17 @@ footer {
       <div id="step1">
         <div class="fi">
           <label>Nome</label>
-          <input class="input" type="text" id="nameInput" placeholder="Como te chamavam no Orkut 😄" oninput="checkReady()">
+          <input class="input" type="text" id="nameInput" name="nome" placeholder="Como te chamavam no Orkut 😄" oninput="checkReady()" required>
         </div>
         <div class="fi">
           <label>Email</label>
-          <input class="input" type="email" id="emailInput" placeholder="seu@email.com" oninput="checkReady()" onkeydown="if(event.key==='Enter')document.getElementById('phoneInput').focus()">
+          <input class="input" type="email" id="emailInput" name="email" placeholder="seu@email.com" oninput="checkReady()" onkeydown="if(event.key==='Enter')document.getElementById('phoneInput').focus()" required>
         </div>
         <div class="fi">
           <label>Telefone <span class="optional-tag">opcional</span></label>
           <div class="phone-row">
             <div class="flag-box">🇧🇷 +55</div>
-            <input class="input" type="tel" id="phoneInput" placeholder="(11) 99999-9999" style="flex:1">
+            <input class="input" type="tel" id="phoneInput" name="telefone" placeholder="(11) 99999-9999" style="flex:1">
           </div>
         </div>
 
@@ -687,6 +693,7 @@ footer {
         </div>
       </div>
     </div>
+    </form>
   </div>
 </section>
 
@@ -734,6 +741,7 @@ footer {
       <div class="ncard-desc">Seus dados não são produto. Nenhum anúncio, nenhuma venda de informação. Nunca.</div>
       <span class="ncard-tag tag-new">Zero data</span>
     </div>
+    </form>
   </div>
 </section>
 
